@@ -153,7 +153,17 @@ class TestScalableDataIngestionPipeline:
         """Test 5: Database manager successfully saves orders"""
         # Create database manager with temp database
         with patch('src.storage.config') as mock_config:
-            mock_config.get.return_value = temp_database
+            def config_side_effect(key, default=None):
+                if key == 'database.path':
+                    return temp_database
+                elif key == 'database.connection_timeout':
+                    return 30
+                elif key == 'database.batch_size':
+                    return 1000
+                else:
+                    return default
+            
+            mock_config.get.side_effect = config_side_effect
             db_manager = DatabaseManager()
             
             result = db_manager.save_orders(sample_orders_data)
