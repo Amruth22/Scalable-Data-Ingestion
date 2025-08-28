@@ -1,0 +1,40 @@
+# Scalable Data Ingestion Pipeline Configuration
+
+# Database Configuration
+database:
+  path: "data/orders.db"
+  connection_timeout: 30
+  batch_size: 1000
+
+# API Configuration
+api:
+  base_url: "https://jsonplaceholder.typicode.com"
+  timeout: 30
+  retry_attempts: 3
+  retry_delay: 5
+  rate_limit_per_minute: 60
+
+# File Processing Configuration
+files:
+  input_dir: "data/input"
+  processed_dir: "data/processed"
+  error_dir: "data/errors"
+  supported_formats: ["csv", "json"]
+
+# Pipeline Configuration
+pipeline:
+  batch_size: 1000
+  max_workers: 4
+  log_level: "INFO"
+  enable_monitoring: true
+
+# Data Quality Configuration
+data_quality:
+  quality_threshold: 80
+  required_fields: ["order_id", "customer_name", "product", "quantity", "price", "order_date"]
+  
+# Transformation Configuration
+transformation:
+  enable_cleaning: true
+  enable_enrichment: true
+  enable_standardization: true
