@@ -46,7 +46,12 @@ class TestScalableDataIngestionPipeline:
         temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.db')
         temp_file.close()
         yield temp_file.name
-        os.unlink(temp_file.name)
+        # Windows-safe cleanup
+        try:
+            os.unlink(temp_file.name)
+        except PermissionError:
+            # Windows file locking - ignore cleanup error
+            pass
     
     def test_api_ingestion_success(self):
         """Test 1: API ingestion successfully fetches and transforms data"""
