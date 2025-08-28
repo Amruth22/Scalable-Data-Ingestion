@@ -164,6 +164,10 @@ class PipelineManager:
             end_time = datetime.now()
             execution_time = (end_time - start_time).total_seconds()
             
+            # Ensure minimum measurable execution time
+            if execution_time == 0.0:
+                execution_time = 0.001  # 1ms minimum
+            
             result.success = True
             result.end_time = end_time.isoformat()
             result.execution_time = execution_time
@@ -182,6 +186,10 @@ class PipelineManager:
             # Handle pipeline failure
             end_time = datetime.now()
             execution_time = (end_time - start_time).total_seconds()
+            
+            # Ensure minimum measurable execution time
+            if execution_time == 0.0:
+                execution_time = 0.001  # 1ms minimum
             
             result.success = False
             result.end_time = end_time.isoformat()
