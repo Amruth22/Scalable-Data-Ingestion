@@ -23,7 +23,7 @@ class DatabaseManager:
     
     def __init__(self):
         self.db_path = config.get('database.path', 'data/orders.db')
-        self.connection_timeout = config.get('database.connection_timeout', 30)
+        self.connection_timeout = float(config.get('database.connection_timeout', 30))
         self.batch_size = config.get('database.batch_size', 1000)
         
         # Ensure database directory exists
@@ -152,6 +152,13 @@ class DatabaseManager:
                 # Add timestamps
                 current_time = datetime.now().isoformat()
                 data_to_save['updated_at'] = current_time
+                
+                # Convert pandas Timestamps to strings
+                for col in data_to_save.columns:
+                    if data_to_save[col].dtype == 'datetime64[ns]':
+                        data_to_save[col] = data_to_save[col].dt.strftime('%Y-%m-%d %H:%M:%S')
+                    elif hasattr(data_to_save[col].iloc[0] if len(data_to_save) > 0 else None, 'isoformat'):
+                        data_to_save[col] = data_to_save[col].astype(str)
                 
                 # Process in batches
                 for i in range(0, len(data_to_save), self.batch_size):
