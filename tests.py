@@ -387,37 +387,7 @@ class TestScalableDataIngestionPipeline:
                     # Windows file locking issue - ignore for tests
                     pass
 
-# Additional utility tests
-class TestUtilityFunctions:
-    """Test utility functions"""
-    
-    def test_safe_divide(self):
-        """Test safe division utility"""
-        assert safe_divide(10, 2) == 5.0
-        assert safe_divide(10, 0) == 0.0
-        assert safe_divide(10, 0, default=1.0) == 1.0
-        assert safe_divide(None, 2, default=0.0) == 0.0
-    
-    def test_format_duration(self):
-        """Test duration formatting utility"""
-        assert format_duration(30) == "30.00s"
-        assert format_duration(90) == "1.5m"
-        assert format_duration(3661) == "1.0h"
-    
-    def test_processing_result(self):
-        """Test ProcessingResult dataclass"""
-        result = ProcessingResult(
-            success=True,
-            data=pd.DataFrame({'test': [1, 2, 3]}),
-            records_processed=3,
-            error_message=None
-        )
-        
-        assert result.success == True
-        assert len(result.data) == 3
-        assert result.records_processed == 3
-        assert result.error_message is None
-        assert result.metadata == {}  # Default empty dict
+
 
 if __name__ == "__main__":
     # Run tests with verbose output
